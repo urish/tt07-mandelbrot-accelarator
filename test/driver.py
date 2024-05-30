@@ -18,6 +18,15 @@ class MandelbrotDriver:
         self._dut = dut
         self.round = 6
 
+    async def reset(self):
+        self._dut._log.info("Reset")
+        self._dut.ena.value = 1
+        self._dut.ui_in.value = 0
+        self._dut.uio_in.value = 0
+        self._dut.rst_n.value = 0
+        await ClockCycles(self._dut.clk, 10)
+        self._dut.rst_n.value = 1
+
     async def set_cr_ci(self, cr: float, ci: float):
         cr = float_to_int(cr)
         ci = float_to_int(ci)
