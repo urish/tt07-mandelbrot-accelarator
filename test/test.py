@@ -1,13 +1,15 @@
-# SPDX-FileCopyrightText: © 2024 Tiny Tapeout
-# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: © 2024 Uri Shaked
+# SPDX-License-Identifier: Apache-2.0
 
 import cocotb
 from cocotb.clock import Clock
 from cocotb.triggers import ClockCycles
 
+from driver import MandelbrotDriver
+
 
 @cocotb.test()
-async def test_project(dut):
+async def test_mandelbrot(dut):
     dut._log.info("Start")
 
     # Set the clock period to 10 us (100 KHz)
@@ -23,18 +25,12 @@ async def test_project(dut):
     await ClockCycles(dut.clk, 10)
     dut.rst_n.value = 1
 
-    dut._log.info("Test project behavior")
+    dut._log.info("Test mandelbrot set")
 
-    # Set the input values you want to test
-    dut.ui_in.value = 20
-    dut.uio_in.value = 30
+    mandelbrot = MandelbrotDriver(dut)
 
-    # Wait for one clock cycle to see the output values
-    await ClockCycles(dut.clk, 1)
-
-    # The following assersion is just an example of how to check the output values.
-    # Change it to match the actual expected output of your module:
-    assert dut.uo_out.value == 50
-
-    # Keep testing the module by changing the input values, waiting for
-    # one or more clock cycles, and asserting the expected output values.
+    # Test some known points
+    assert await mandelbrot.run(-2) == 32
+    assert await mandelbrot.run(-2.01) == 1
+    assert await mandelbrot.run(0) == 32
+    assert await mandelbrot.run(1.2 + 1.4j) == 2
