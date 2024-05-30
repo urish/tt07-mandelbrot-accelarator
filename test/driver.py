@@ -74,15 +74,15 @@ class MandelbrotDriver:
 
     @property
     def Zr_squared(self):
-        return tofloat(self._dut.user_project.Zr_squared.value.integer, self.round)
+        return tofloat(self._dut.user_project.mandelbrot.Zr_squared.value.integer, self.round)
 
     @property
     def Zi_squared(self):
-        return tofloat(self._dut.user_project.Zi_squared.value.integer, self.round)
+        return tofloat(self._dut.user_project.mandelbrot.Zi_squared.value.integer, self.round)
 
     @property
     def ZrZi(self):
-        return tofloat(self._dut.user_project.ZrZi.value.integer, self.round)
+        return tofloat(self._dut.user_project.mandelbrot.ZrZi.value.integer, self.round)
 
     @property
     def Rr(self):
@@ -94,8 +94,8 @@ class MandelbrotDriver:
 
     @property
     def Z_abs_squared(self):
-        return tofloat(self._dut.user_project.Z_abs_squared.value.integer, self.round)
+        return tofloat(self._dut.user_project.mandelbrot.Z_abs_squared.value.integer, self.round)
 
     @property
     def Z_minus_four(self):
-        return tofloat(self._dut.user_project.Z_minus_four.value.integer, self.round)
+        return tofloat(self._dut.user_project.mandelbrot.Z_minus_four.value.integer, self.round)
