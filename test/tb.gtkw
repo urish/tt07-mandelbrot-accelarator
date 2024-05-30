@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.3.103 (w)1999-2019 BSI
-[*] Thu May 30 14:00:10 2024
+[*] Thu May 30 21:46:35 2024
 [*]
 [dumpfile] "/home/uri/p/tt07-mandelbrot-accelarator/test/tb.vcd"
-[dumpfile_mtime] "Thu May 30 13:57:50 2024"
-[dumpfile_size] 17666
+[dumpfile_mtime] "Thu May 30 21:45:53 2024"
+[dumpfile_size] 59657
 [savefile] "/home/uri/p/tt07-mandelbrot-accelarator/test/tb.gtkw"
 [timestart] 0
 [size] 1908 1047
 [pos] -1 -1
-*-27.060387 736100000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-27.060387 84600000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb.
 [treeopen] tb.user_project.
 [sst_width] 297
@@ -24,6 +24,12 @@ tb.user_project.rst_n
 -Inputs
 @22
 tb.user_project.ui_in[7:0]
+@28
+tb.i_start
+@29
+tb.i_load_Cr
+@28
+tb.i_load_Ci
 @200
 -Bidirectional Pins
 @22

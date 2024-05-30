@@ -21,7 +21,9 @@ class MandelbrotDriver:
     async def reset(self):
         self._dut._log.info("Reset")
         self._dut.ena.value = 1
-        self._dut.ui_in.value = 0
+        self._dut.i_start.value = 0
+        self._dut.i_load_Cr.value = 0
+        self._dut.i_load_Ci.value = 0
         self._dut.uio_in.value = 0
         self._dut.rst_n.value = 0
         await ClockCycles(self._dut.clk, 10)
@@ -29,12 +31,20 @@ class MandelbrotDriver:
 
     async def set_cr_ci(self, cr: float, ci: float):
         cr = float_to_int(cr)
-        ci = float_to_int(ci)
-        for i in range(8):
-            ci_bits = (ci >> (i * 4)) & 0xF
-            cr_bits = (cr >> (i * 4)) & 0xF
-            self._dut.uio_in.value = (ci_bits << 4) | cr_bits
+        for i in range(4):
+            self._dut.uio_in.value = (cr >> (i * 8)) & 0xFF
+            if i == 3:
+                self._dut.i_load_Cr.value = 1
             await ClockCycles(self._dut.clk, 1)
+        self._dut.i_load_Cr.value = 0
+
+        ci = float_to_int(ci)
+        for i in range(4):
+            self._dut.uio_in.value = (ci >> (i * 8)) & 0xFF
+            if i == 3:
+                self._dut.i_load_Ci.value = 1
+            await ClockCycles(self._dut.clk, 1)
+        self._dut.i_load_Ci.value = 0
 
     async def start(self):
         self._dut.ui_in.value = 1
@@ -74,11 +84,15 @@ class MandelbrotDriver:
 
     @property
     def Zr_squared(self):
-        return tofloat(self._dut.user_project.mandelbrot.Zr_squared.value.integer, self.round)
+        return tofloat(
+            self._dut.user_project.mandelbrot.Zr_squared.value.integer, self.round
+        )
 
     @property
     def Zi_squared(self):
-        return tofloat(self._dut.user_project.mandelbrot.Zi_squared.value.integer, self.round)
+        return tofloat(
+            self._dut.user_project.mandelbrot.Zi_squared.value.integer, self.round
+        )
 
     @property
     def ZrZi(self):
@@ -94,8 +108,12 @@ class MandelbrotDriver:
 
     @property
     def Z_abs_squared(self):
-        return tofloat(self._dut.user_project.mandelbrot.Z_abs_squared.value.integer, self.round)
+        return tofloat(
+            self._dut.user_project.mandelbrot.Z_abs_squared.value.integer, self.round
+        )
 
     @property
     def Z_minus_four(self):
-        return tofloat(self._dut.user_project.mandelbrot.Z_minus_four.value.integer, self.round)
+        return tofloat(
+            self._dut.user_project.mandelbrot.Z_minus_four.value.integer, self.round
+        )

@@ -18,7 +18,22 @@ All the calculations are done in 32-bit IEEE 754 floating point format. The floa
 
 ## How to test
 
-Shift the values of the complex number `c` through `Cr[3:0]` (for the real part) and `Ci[3:0]` (for the imaginary part), LSB first. Strobe the `start` signal to begin the calculation. The `unbounded` signal will be set high when the result is unbounded (as soon as `|z| > 2`).
+Load the value of the complex number `c` that you want to test into the `Cr` and `Ci` registers. Each register holds a 32-bit IEEE 754 floating point number. The value of `c` is `Cr + Ci * i`, where `i` is the imaginary unit.
+
+The registers are shifted in LSB first, 8 bits at a time. When shifting the last byte, the corresponding `load` signal should be set high to load the value into the register.
+
+For example, to load the real part of `c` into `Cr`, you would need four clock cycles:
+
+1. Set `data_in` to the least significant byte (`Cr[7:0]`)
+2. Set `data_in` to the second byte (`Cr[15:8]`)
+3. Set `data_in` to the third byte (`Cr[23:16]`)
+4. Set `data_in` to the most significant byte (`Cr[31:24]`), and set `load_Cr` high to load the value into the register.
+
+Do the same for the imaginary part of `c` and `Ci`. In case you want to load the same value into both `Cr` and `Ci`, you can set `load_Cr` and `load_Ci` high at the same time.
+
+Strobe the `start` signal to begin the calculation. The design will iterate the function `z = z^2 + c`, one iteration per clock cycle. When the result is unbounded, the `unbounded` signal will be set high. For numbers that are part of the mandelbrot set, the `unbounded` signal will remain low as the design iterates the function.
+
+The values of `Cr` and `Ci` are buffered, so you can load new values into the registers while the design is calculating the mandelbrot set for the previous values. When you strobe the `start` signal, the design will begin calculating the mandelbrot set for the new values of `c`.
 
 ## External hardware
 

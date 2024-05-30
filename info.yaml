@@ -24,8 +24,8 @@ project:
 pinout:
   # Inputs
   ui[0]: "start"
-  ui[1]: ""
-  ui[2]: ""
+  ui[1]: "load_Cr"
+  ui[2]: "load_Ci"
   ui[3]: ""
   ui[4]: ""
   ui[5]: ""
@@ -43,14 +43,14 @@ pinout:
   uo[7]: ""
 
   # Bidirectional pins
-  uio[0]: "Cr_in[0]"
-  uio[1]: "Cr_in[1]"
-  uio[2]: "Cr_in[2]"
-  uio[3]: "Cr_in[3]"
-  uio[4]: "Ci_in[0]"
-  uio[5]: "Ci_in[1]"
-  uio[6]: "Ci_in[2]"
-  uio[7]: "Ci_in[3]"
+  uio[0]: "data_in[0]"
+  uio[1]: "data_in[1]"
+  uio[2]: "data_in[2]"
+  uio[3]: "data_in[3]"
+  uio[4]: "data_in[4]"
+  uio[5]: "data_in[5]"
+  uio[6]: "data_in[6]"
+  uio[7]: "data_in[7]"
 
 # Do not change!
 yaml_version: 6

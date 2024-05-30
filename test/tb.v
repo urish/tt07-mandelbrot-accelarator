@@ -1,5 +1,4 @@
-`default_nettype none
-`timescale 1ns / 1ps
+`default_nettype none `timescale 1ns / 1ps
 
 /* This testbench just instantiates the module and makes some convenient wires
    that can be driven / tested by the cocotb test.py.
@@ -17,11 +16,15 @@ module tb ();
   reg clk;
   reg rst_n;
   reg ena;
-  reg [7:0] ui_in;
+  wire [7:0] ui_in = {5'b0, i_load_Ci, i_load_Cr, i_start};
   reg [7:0] uio_in;
   wire [7:0] uo_out;
   wire [7:0] uio_out;
   wire [7:0] uio_oe;
+
+  reg i_start;
+  reg i_load_Cr;
+  reg i_load_Ci;
 
   // Replace tt_um_example with your module name:
   tt_um_mandelbrot_accel user_project (

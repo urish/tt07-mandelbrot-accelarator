@@ -21,10 +21,14 @@ module tt_um_mandelbrot_accel (
   assign uio_out = 0;
 
   wire i_start = ui_in[0];
-  wire [3:0] Cr_in = uio_in[3:0];
-  wire [3:0] Ci_in = uio_in[7:4];
+  wire i_load_Cr = ui_in[1];
+  wire i_load_Ci = ui_in[2];
+  wire [7:0] data_in = uio_in;
 
   reg o_unbounded;
+
+  reg [23:0] data_in_reg;
+  wire [31:0] data_in_word = {data_in, data_in_reg};
 
   reg [31:0] Cr_next;
   reg [31:0] Ci_next;
@@ -56,22 +60,28 @@ module tt_um_mandelbrot_accel (
       Cr_next <= 0;
       Ci_next <= 0;
       o_unbounded <= 0;
+      data_in_reg <= 0;
     end else begin
+      if (i_load_Cr) begin
+        Cr_next <= data_in_word;
+      end
+      if (i_load_Ci) begin
+        Ci_next <= data_in_word;
+      end
       if (i_start) begin
         Zr <= 0;
         Zi <= 0;
-        Cr <= Cr_next;
-        Ci <= Ci_next;
+        Cr <= i_load_Cr ? data_in_word : Cr_next;
+        Ci <= i_load_Ci ? data_in_word : Ci_next;
       end else begin
         Zr <= Rr;
         Zi <= Ri;
-        Cr_next <= {Cr_in, Cr_next[31:4]};
-        Ci_next <= {Ci_in, Ci_next[31:4]};
+        data_in_reg <= {data_in, data_in_reg[23:8]};
         o_unbounded <= unbounded;
       end
     end
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{ena, ui_in[7:1], 1'b0};
+  wire _unused = &{ena, ui_in[7:3], 1'b0};
 
 endmodule
