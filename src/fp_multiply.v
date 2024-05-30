@@ -27,7 +27,7 @@ module fp_multiply (
   // Split the inputs into sign, exponent, and mantissa
   wire sign_a, sign_b, sign_result;
   wire [7:0] exponent_a, exponent_b, exponent_result;
-  wire [23:0] mantissa_a, mantissa_b, mantissa_result;
+  wire [23:0] mantissa_a, mantissa_b;
 
   assign sign_a = a_operand[31];
   assign sign_b = b_operand[31];
