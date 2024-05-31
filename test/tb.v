@@ -25,6 +25,7 @@ module tb ();
   reg i_start;
   reg i_load_Cr;
   reg i_load_Ci;
+  wire o_unbounded = uo_out[0];
 
   // Replace tt_um_example with your module name:
   tt_um_mandelbrot_accel user_project (

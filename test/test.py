@@ -33,6 +33,55 @@ async def test_mandelbrot(dut):
 
 
 @cocotb.test()
+async def test_docs_example(dut):
+    dut._log.info("Start")
+
+    # Set the clock period to 10 us (100 KHz)
+    clock = Clock(dut.clk, 10, units="us")
+    cocotb.start_soon(clock.start())
+
+    mandelbrot = MandelbrotDriver(dut)
+    await mandelbrot.reset()
+
+    dut._log.info("Test the example from docs/info.md")
+
+    # Cr ← 1.2 (0x3f99999a)
+    dut.uio_in.value = 0x9A
+    await ClockCycles(dut.clk, 1)
+    dut.uio_in.value = 0x99
+    await ClockCycles(dut.clk, 1)
+    dut.uio_in.value = 0x99
+    await ClockCycles(dut.clk, 1)
+    dut.uio_in.value = 0x3F
+    dut.i_load_Cr.value = 1  # Strobe the load signal
+    await ClockCycles(dut.clk, 1)
+    dut.i_load_Cr.value = 0  # Clear the load signal
+
+    # Ci ← 1.4 (0x3fb33333)
+    dut.uio_in.value = 0x33
+    await ClockCycles(dut.clk, 1)
+    dut.uio_in.value = 0x33
+    await ClockCycles(dut.clk, 1)
+    dut.uio_in.value = 0xB3
+    await ClockCycles(dut.clk, 1)
+    dut.uio_in.value = 0x3F
+    dut.i_load_Ci.value = 1  # Strobe the load signal
+    dut.i_start.value = 1  # Strobe the start signal
+    await ClockCycles(dut.clk, 1)
+    dut.i_load_Ci.value = 0
+    dut.i_start.value = 0
+    await ClockCycles(dut.clk, 1)
+
+    # We sample on the falling edge, to make sure the result is ready
+    await ClockCycles(dut.clk, 1, rising=False)
+    assert dut.o_unbounded.value == 0
+    await ClockCycles(dut.clk, 1, rising=False)
+    assert dut.o_unbounded.value == 0
+    await ClockCycles(dut.clk, 1, rising=False)
+    assert dut.o_unbounded.value == 1  # Unbounded after 2 iterations
+
+
+@cocotb.test()
 async def test_random_points(dut):
     dut._log.info("Start")
 

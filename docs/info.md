@@ -35,6 +35,27 @@ Strobe the `start` signal to begin the calculation. The design will iterate the 
 
 The values of `Cr` and `Ci` are buffered, so you can load new values into the registers while the design is calculating the mandelbrot set for the previous values. When you strobe the `start` signal, the design will begin calculating the mandelbrot set for the new values of `c`.
 
+The following example illustrates how to load the value `c = 1.2 + 1.4i` into the registers and start the calculation:
+
+| Clock | `data_in` | `load_Cr` | `load_Ci` | `start` | `unbounded` |
+|-------|-----------|-----------|-----------|---------|-------------|
+| 1     | 0x9A      | 0         | 0         | 0       | 0           |
+| 2     | 0x99      | 0         | 0         | 0       | 0           |
+| 3     | 0x99      | 0         | 0         | 0       | 0           |
+| 4     | 0x3F      | 1         | 0         | 0       | 0           |
+| 5     | 0x33      | 0         | 0         | 0       | 0           |
+| 6     | 0x33      | 0         | 0         | 0       | 0           |
+| 7     | 0xB3      | 0         | 0         | 0       | 0           |
+| 8     | 0x3F      | 0         | 1         | 1       | 0           |
+| 9     | 0x00      | 0         | 0         | 0       | 0           |
+| 10    | 0x00      | 0         | 0         | 0       | 1           |
+
+Where:
+- 0x3F99999A is the IEEE 754 floating point representation of the real part of `c` (1.2)
+- 0x3FB33333 is the IEEE 754 floating point representation of the imaginary part of `c` (1.4)
+- Unbounded goes high two clock cycles after the start signal is strobed, indicating that the result is unbounded.
+
+
 ## External hardware
 
 None

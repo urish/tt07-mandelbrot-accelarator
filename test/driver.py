@@ -29,22 +29,22 @@ class MandelbrotDriver:
         await ClockCycles(self._dut.clk, 10)
         self._dut.rst_n.value = 1
 
-    async def set_cr_ci(self, cr: float, ci: float):
-        cr = float_to_int(cr)
+    async def load_reg(self, load_signal, value: float, strobe_start=False):
+        value = float_to_int(value)
         for i in range(4):
-            self._dut.uio_in.value = (cr >> (i * 8)) & 0xFF
+            self._dut.uio_in.value = (value >> (i * 8)) & 0xFF
             if i == 3:
-                self._dut.i_load_Cr.value = 1
+                load_signal.value = 1
+                if strobe_start:
+                    self._dut.i_start.value = 1
             await ClockCycles(self._dut.clk, 1)
-        self._dut.i_load_Cr.value = 0
+        load_signal.value = 0
+        if strobe_start:
+            self._dut.i_start.value = 0
 
-        ci = float_to_int(ci)
-        for i in range(4):
-            self._dut.uio_in.value = (ci >> (i * 8)) & 0xFF
-            if i == 3:
-                self._dut.i_load_Ci.value = 1
-            await ClockCycles(self._dut.clk, 1)
-        self._dut.i_load_Ci.value = 0
+    async def load_c(self, c: complex, strobe_start=False):
+        await self.load_reg(self._dut.i_load_Cr, c.real)
+        await self.load_reg(self._dut.i_load_Ci, c.imag, strobe_start)
 
     async def start(self):
         self._dut.ui_in.value = 1
@@ -53,8 +53,8 @@ class MandelbrotDriver:
         await ClockCycles(self._dut.clk, 1)
 
     async def run(self, c: complex, iter: int = 32):
-        await self.set_cr_ci(c.real, c.imag)
-        await self.start()
+        await self.load_c(c, True)
+        await ClockCycles(self._dut.clk, 1)
         for i in range(iter):
             await ClockCycles(self._dut.clk, 1)
             if self.unbounded:
