@@ -27,8 +27,8 @@ Y_RANGE = (-2.0, 2.0)
 async def test_mandelbrot_png(dut):
     dut._log.info("Start")
 
-    # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 10, units="us")
+    # Set the clock period to 50 ns (20 MHz)
+    clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
     # Reset

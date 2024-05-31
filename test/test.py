@@ -14,8 +14,8 @@ from mandelbrot import mandelbrot_calc
 async def test_mandelbrot(dut):
     dut._log.info("Start")
 
-    # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 10, units="us")
+    # Set the clock period to 50 ns (20 MHz)
+    clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
     mandelbrot = MandelbrotDriver(dut)
@@ -36,8 +36,8 @@ async def test_mandelbrot(dut):
 async def test_docs_example(dut):
     dut._log.info("Start")
 
-    # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 10, units="us")
+    # Set the clock period to 50 ns (20 MHz)
+    clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
     mandelbrot = MandelbrotDriver(dut)
@@ -85,8 +85,8 @@ async def test_docs_example(dut):
 async def test_random_points(dut):
     dut._log.info("Start")
 
-    # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 10, units="us")
+    # Set the clock period to 50 ns (20 MHz)
+    clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
     mandelbrot = MandelbrotDriver(dut)
@@ -107,8 +107,8 @@ async def test_random_points(dut):
 async def test_unbounded_stays_high(dut):
     dut._log.info("Start")
 
-    # Set the clock period to 10 us (100 KHz)
-    clock = Clock(dut.clk, 10, units="us")
+    # Set the clock period to 50 ns (20 MHz)
+    clock = Clock(dut.clk, 50, units="ns")
     cocotb.start_soon(clock.start())
 
     mandelbrot = MandelbrotDriver(dut)
