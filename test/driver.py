@@ -54,7 +54,6 @@ class MandelbrotDriver:
 
     async def run(self, c: complex, iter: int = 32):
         await self.load_c(c, True)
-        await ClockCycles(self._dut.clk, 1)
         for i in range(iter):
             await ClockCycles(self._dut.clk, 1)
             if self.unbounded:

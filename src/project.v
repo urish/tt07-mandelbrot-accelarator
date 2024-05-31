@@ -69,8 +69,8 @@ module tt_um_mandelbrot_accel (
         Ci_next <= data_in_word;
       end
       if (i_start) begin
-        Zr <= 0;
-        Zi <= 0;
+        Zr <= i_load_Cr ? data_in_word : Cr_next;
+        Zi <= i_load_Ci ? data_in_word : Ci_next;
         Cr <= i_load_Cr ? data_in_word : Cr_next;
         Ci <= i_load_Ci ? data_in_word : Ci_next;
         o_unbounded <= 0;

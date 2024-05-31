@@ -76,8 +76,6 @@ async def test_docs_example(dut):
     await ClockCycles(dut.clk, 1, rising=False)
     assert dut.o_unbounded.value == 0
     await ClockCycles(dut.clk, 1, rising=False)
-    assert dut.o_unbounded.value == 0
-    await ClockCycles(dut.clk, 1, rising=False)
     assert dut.o_unbounded.value == 1  # Unbounded after 2 iterations
 
 
