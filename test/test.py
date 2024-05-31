@@ -31,6 +31,11 @@ async def test_mandelbrot(dut):
     assert await mandelbrot.run(1.2 + 1.4j) == 2
     assert await mandelbrot.run(-0.2 + 0.83333333333333j) == 20
 
+    # Check that the number of iterations remains correct, even after some extra clock cycles
+    assert mandelbrot.iter == 20
+    await ClockCycles(dut.clk, 10)
+    assert mandelbrot.iter == 20
+
 
 @cocotb.test()
 async def test_docs_example(dut):

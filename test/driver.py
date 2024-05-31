@@ -62,7 +62,11 @@ class MandelbrotDriver:
 
     @property
     def unbounded(self):
-        return self._dut.uo_out.value.integer & 0x1
+        return self._dut.o_unbounded.value.integer
+    
+    @property
+    def iter(self):
+        return self._dut.o_iter.value.integer
 
     # All the signals below are internal and are only available during RTL simulation
     @property

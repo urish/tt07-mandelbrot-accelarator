@@ -16,7 +16,7 @@ module tt_um_mandelbrot_accel (
     input  wire       rst_n     // reset_n - low to reset
 );
 
-  assign uo_out  = {7'b0, o_unbounded};
+  assign uo_out  = {o_iter, o_unbounded};
   assign uio_oe  = 0;
   assign uio_out = 0;
 
@@ -26,6 +26,7 @@ module tt_um_mandelbrot_accel (
   wire [7:0] data_in = uio_in;
 
   reg o_unbounded;
+  reg [6:0] o_iter;
 
   reg [23:0] data_in_reg;
   wire [31:0] data_in_word = {data_in, data_in_reg};
@@ -61,6 +62,7 @@ module tt_um_mandelbrot_accel (
       Ci_next <= 0;
       o_unbounded <= 0;
       data_in_reg <= 0;
+      o_iter <= 0;
     end else begin
       if (i_load_Cr) begin
         Cr_next <= data_in_word;
@@ -74,12 +76,15 @@ module tt_um_mandelbrot_accel (
         Cr <= i_load_Cr ? data_in_word : Cr_next;
         Ci <= i_load_Ci ? data_in_word : Ci_next;
         o_unbounded <= 0;
+        o_iter <= 1;
       end else begin
         Zr <= Rr;
         Zi <= Ri;
         data_in_reg <= {data_in, data_in_reg[23:8]};
         if (unbounded) begin
           o_unbounded <= 1;
+        end else if (!o_unbounded) begin
+          o_iter <= o_iter + 1;
         end
       end
     end
