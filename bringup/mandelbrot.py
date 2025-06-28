@@ -58,7 +58,7 @@ class MandelbrotDriver:
 
         self.tt.ui_in.value = 0
         for iter in range(max_iter):
-            if self.tt.uo_out.value & UO_UNBOUNDED:
+            if platform.read_uo_out_byte() & UO_UNBOUNDED:
                 return iter
             self.tt.clock_project_once()
 
@@ -80,7 +80,7 @@ def export_bitmap(output_file: str = "mandelbrot_out.bin"):
     with open(output_file, "wb") as f:
         row_data = bytearray(IMAGE_WIDTH)
         for py in range(IMAGE_HEIGHT):
-            print(f"Row {py} of {IMAGE_HEIGHT}")
+            print(f"Row {py + 1} of {IMAGE_HEIGHT}")
             for px in range(IMAGE_WIDTH):
                 # Convert pixel coordinate to complex number
                 x = xmin + (xmax - xmin) * px / (IMAGE_WIDTH - 1)
@@ -99,4 +99,4 @@ def export_bitmap(output_file: str = "mandelbrot_out.bin"):
 mandelbrot = MandelbrotDriver(tt)
 print("mandelbrot.run(1.2, 1.4) =", mandelbrot.run(1.2, 1.4))
 print("To export the bitmap, type: export_bitmap()")
-print("Exporting the bitmap takes about three hours.")
+print("Exporting the bitmap takes about 24 minutes.")
